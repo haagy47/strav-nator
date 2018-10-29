@@ -1,0 +1,11 @@
+{
+  "name": "strav-nator",
+  "version": "1.0.0",
+  "description": "A Strava activity name generator.",
+  "main": "server.js",
+  "scripts": {
+    "test": "export NODE_ENV=test && jasmine"
+  },
+  "author": "Emily Haag",
+  "license": "ISC"
+}
