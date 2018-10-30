@@ -1,4 +1,3 @@
-var LocalStrategy   = require('passport-local').Strategy;
 var StravaStrategy = require('passport-strava').Strategy;
 
 var User = require('./db/models').User;
