@@ -20,7 +20,7 @@ module.exports = function(passport) {
 
         clientID        : process.env.clientID,
         clientSecret    : process.env.clientSecret,
-        callbackURL     : process.env.callbackURL,
+        callbackURL     : process.env.callbackURLProd,
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
