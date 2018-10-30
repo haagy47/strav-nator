@@ -16,7 +16,49 @@ module.exports = function(passport) {
         });
     });
 
-    /*passport.use(new StravaStrategy({
+    passport.use(new StravaStrategy({
+
+        clientID        : process.env.clientID,
+        clientSecret    : process.env.clientSecret,
+        callbackURL     : process.env.callbackURL,
+        passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+
+    },
+    function(req, accessToken, refreshToken, profile, done) {
+          User.findOne({ where :{ 'stravaId' : profile.id }})
+					.then (function (user) {
+						if (user) {
+
+							// if there is a user id already but no token (user was linked at one point and then removed)
+							if (!user.token) {
+								user.token = accessToken;
+								user.name  = profile.displayName;
+								//user.email = profile.email.value;
+
+								user.save()
+									.then( function() {done(null, user);})
+									.catch (function(e) {});
+              } else {
+								done(null, user);
+							}
+						} else {
+							// if there is no user, create them
+							var newUser = User.build ({
+								stravaId: profile.id,
+								token: accessToken,
+								name: profile.displayName,
+								//email: profile.email.value
+							});
+							newUser.save()
+									.then( function() {done(null, user);})
+									.catch (function(e) {});
+						}
+					});
+        }));
+
+  };
+
+    /* passport.use(new StravaStrategy({
       clientID: process.env.clientID,
       clientSecret: process.env.clientSecret,
       callbackURL: process.env.callbackURL
@@ -75,7 +117,7 @@ module.exports = function(passport) {
                   }
               });
           });
-      }));  */
+      }));
 
       const stravaConfig = {
         clientID: process.env.clientID,
@@ -95,8 +137,6 @@ module.exports = function(passport) {
           ))
           .catch(done)
       }));
-
-};
 
 
     /*passport.use(new StravaStrategy({

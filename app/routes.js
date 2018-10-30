@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/auth/strava', passport.authenticate('strava', {scope:['public']}));
+    app.get('/auth/strava', passport.authenticate('strava', {scope:['profile:read_all']}));
 
     app.get('/auth/strava/callback',
         passport.authenticate('strava', {
