@@ -1,28 +1,153 @@
 var LocalStrategy   = require('passport-local').Strategy;
+var StravaStrategy = require('passport-strava').Strategy;
 
-// load up the user model
-var User            = require('./db/models/user');
+var User = require('./db/models').User;
+var configAuth = require('./auth');
 
-// expose this function to our app using module.exports
 module.exports = function(passport) {
 
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
-
-    // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
 
-    // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
             done(err, user);
         });
     });
+
+    /*passport.use(new StravaStrategy({
+      clientID: process.env.clientID,
+      clientSecret: process.env.clientSecret,
+      callbackURL: process.env.callbackURL
+
+      }, function (accessToken, refreshToken, profile, done) {
+          //Using next tick to take advantage of async properties
+          process.nextTick(function () {
+              User.findOne( { where : { stravaId : profile.id } }).then(function (user, err) {
+                if (err)
+                    return done(err);
+
+                // if the user is found, then log them in
+                if (user) {
+                    return done(null, user); // user found, return that user
+                } else {
+                    // if there is no user found with that strava id, create them
+                    var newUser            = new User();
+                    console.log(profile)
+                    // set all of the facebook information in our user model
+                    newUser.stravaId = profile.id; // set the users strava id
+                    newUser.token = accessToken; // we will save the token that strava provides to the user
+                    newUser.name  = profile.name.firstname + ' ' + profile.name.lastname; // look at the passport user profile to see how names are returned
+                    newUser.email = profile.email;
+
+                    // save our user to the database
+                    newUser.create(function(err) {
+                        if (err)
+                            throw err;
+
+                        // if successful, return the new user
+                        return done(null, newUser);
+                    });
+                }
+                  if(err) {
+                      return done(err);
+                  }
+                  if(user) {
+                      return done(null, user);
+                  } else {
+                      //Create the user
+                      User.create({
+                          stravaId : profile.id,
+                          token : accessToken,
+                          name: profile.firstname,
+                          email : profile.email
+                      });
+
+                      //Find the user (therefore checking if it was indeed created) and return it
+                      User.findOne( { where : { stravaId : profile.id } }).then(function (user, err) {
+                          if(user) {
+                              return done(null, user);
+                          } else {
+                              return done(err);
+                          }
+                      });
+                  }
+              });
+          });
+      }));  */
+
+      const stravaConfig = {
+        clientID: process.env.clientID,
+        clientSecret: process.env.clientSecret,
+        callbackURL: process.env.callbackURL
+      }
+
+      passport.use(new StravaStrategy(stravaConfig, (accessToken, refreshToken, profile, done) => {
+        const stravaId = profile.id
+        const name = profile.firstname
+        const email = profile.email
+        User.find({where: {stravaId}})
+          .then(foundUser => (foundUser
+            ? done(null, foundUser)
+            : User.create({name, email, stravaId})
+              .then(createdUser => done(null, createdUser))
+          ))
+          .catch(done)
+      }));
+
+};
+
+
+    /*passport.use(new StravaStrategy({
+
+        clientID: process.env.clientID,
+        clientSecret: process.env.clientSecret,
+        callbackURL: process.env.callbackURL
+
+    },
+
+
+    // facebook will send back the token and profile
+    function(accessToken, refreshToken, profile, done) {
+
+        // asynchronous
+        process.nextTick(function() {
+
+            // find the user in the database based on their facebook id
+            User.findOne({ where: {stravaId : profile.id} }, function(err, user) {
+                // if there is an error, stop everything and return that
+                // ie an error connecting to the database
+                if (err)
+                    return done(err);
+
+                // if the user is found, then log them in
+                if (user) {
+                    return done(null, user); // user found, return that user
+                } else {
+                    // if there is no user found with that strava id, create them
+                    var newUser            = new User();
+
+                    // set all of the facebook information in our user model
+                    newUser.stravaId = profile.id; // set the users strava id
+                    newUser.token = accessToken; // we will save the token that strava provides to the user
+                    newUser.name  = profile.name.firstname + ' ' + profile.name.lastname; // look at the passport user profile to see how names are returned
+                    newUser.email = profile.email;
+
+                    // save our user to the database
+                    newUser.create(function(err) {
+                        if (err)
+                            throw err;
+
+                        // if successful, return the new user
+                        return done(null, newUser);
+                    });
+                }
+
+            });
+        });
+
+    }));
 
     // =========================================================================
     // LOCAL SIGNUP ============================================================
@@ -75,6 +200,7 @@ module.exports = function(passport) {
         });
 
     }));
-    */
 
 };
+
+    */

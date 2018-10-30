@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
-    stravaId: DataTypes.STRING,
+    stravaId: DataTypes.INTEGER,
     token: DataTypes.STRING,
     name: DataTypes.STRING,
     email: DataTypes.STRING
