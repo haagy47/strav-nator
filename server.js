@@ -3,7 +3,7 @@ const path = require("path");
 const viewsFolder = path.join(__dirname, "views");
 const express  = require('express');
 const app      = express();
-const port     = process.env.PORT || 3000;
+const port     = normalizePort(process.env.PORT || 3000);
 const passport = require('passport');
 const flash    = require('connect-flash');
 
@@ -15,6 +15,17 @@ const session      = require('express-session');
 const configDB = require('./config/db/models/index.js');
 
 require('./config/passport-config.js')(passport);
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+  if (isNaN(port)) {
+    return val;
+  }
+  if (port >= 0) {
+    return port;
+  }
+  return false;
+}
 
 app.use(morgan('dev'));
 app.use(cookieParser());
