@@ -22,15 +22,15 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/auth/strava', passport.authenticate('strava', {scope:['profile:read_all']}));
+    app.get('/auth/strava', passport.authorize('strava', {scope:['profile:read_all']}));
 
     app.get('/auth/strava/callback',
-        passport.authenticate('strava', {
+      passport.authorize('strava', {
             successRedirect : '/profile',
             failureRedirect : '/'
-        }));
+      }));
 
-    app.get('/logout', function(req, res) {
+    /* app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
     });
@@ -40,6 +40,7 @@ module.exports = function(app, passport) {
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
+    */
 
 };
 

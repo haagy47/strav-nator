@@ -1,16 +1,16 @@
 require("dotenv").config();
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 3000;
-var passport = require('passport');
-var flash    = require('connect-flash');
+const express  = require('express');
+const app      = express();
+const port     = process.env.PORT || 3000;
+const passport = require('passport');
+const flash    = require('connect-flash');
 
-var morgan       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
+const morgan       = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser   = require('body-parser');
+const session      = require('express-session');
 
-var configDB = require('./config/db/models/index.js');
+const configDB = require('./config/db/models/index.js');
 
 require('./config/passport-config.js')(passport); // pass passport for configuration
 
