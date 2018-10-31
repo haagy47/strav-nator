@@ -24,23 +24,16 @@ module.exports = function(app, passport) {
 
     app.get('/auth/strava', passport.authorize('strava', {scope:['profile:read_all']}));
 
-    app.get('/auth/strava/callback',
+    app.get('/auth/strava/callback', function(req, res, next) {
+      passport.authenticate('strava', { successRedirect: '/profile',
+        failureRedirect: '/' })(req, res, next);
+    });
+
+    /*app.get('/auth/strava/callback',
       passport.authorize('strava', {
             successRedirect : '/profile',
             failureRedirect : '/'
-      }));
-
-    /* app.get('/logout', function(req, res) {
-        req.logout();
-        res.redirect('/');
-    });
-
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
-    */
+      }));*/
 
 };
 
