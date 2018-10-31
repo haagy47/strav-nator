@@ -59,9 +59,9 @@ module.exports = function(passport) {
 
     passport.use(new StravaStrategy({
 
-        clientID        : process.env.clientID,
-        clientSecret    : process.env.clientSecret,
-        callbackURLProd     : process.env.callbackURL,
+        clientID : process.env.clientID,
+        clientSecret : process.env.clientSecret,
+        callbackURLProd : process.env.callbackURL,
         passReqToCallback : true
 
     },
