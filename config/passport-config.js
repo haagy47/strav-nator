@@ -61,7 +61,7 @@ module.exports = function(passport) {
 
         clientID : process.env.clientID,
         clientSecret : process.env.clientSecret,
-        callbackURL : process.env.callbackURL,
+        callbackURLProd : process.env.callbackURL,
         passReqToCallback : true
 
     },
