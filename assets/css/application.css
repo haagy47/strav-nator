@@ -1,0 +1,35 @@
+body {
+  padding-top: 54px;
+}
+
+.navbar .navbar-brand {
+  color: #FC4C03;
+  font-weight: bold;
+}
+
+.nav-link {
+  color: #000;
+}
+
+.jumbotron {
+  background: #F8F9FA;
+  text-align: center;
+}
+
+.home-section {
+  padding-bottom: 25px;
+}
+
+.btn-style {
+  background-color: #FC4C03;
+  color: #FFFFFF;
+}
+
+.btn-style:hover {
+  background-color: #ea4b09;
+  color: #FFFFFF;
+}
+
+.jumbo-dashboard {
+  text-align: left;
+}

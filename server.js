@@ -1,4 +1,6 @@
 require("dotenv").config();
+const path = require("path");
+const viewsFolder = path.join(__dirname, "views");
 const express  = require('express');
 const app      = express();
 const port     = process.env.PORT || 3000;
@@ -12,22 +14,22 @@ const session      = require('express-session');
 
 const configDB = require('./config/db/models/index.js');
 
-require('./config/passport-config.js')(passport); // pass passport for configuration
+require('./config/passport-config.js')(passport);
 
-// set up our express application
-app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser()); // get information from html forms
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser());
 
-app.set('view engine', 'ejs'); // set up ejs for templating
+app.set("views", viewsFolder);
+app.set('view engine', 'ejs');
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
-// required for passport
-app.use(session({ secret: 'stravaline' })); // session secret
+app.use(session({ secret: 'stravaline' }));
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(passport.session());
+app.use(flash());
 
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, passport);
 
 app.listen(port);
 console.log('Take a look on port ' + port);
