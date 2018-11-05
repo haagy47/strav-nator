@@ -29,13 +29,17 @@ function normalizePort(val) {
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("views", viewsFolder);
 app.set('view engine', 'ejs');
 app.use("/assets", express.static(path.join(__dirname, "assets")));
-
-app.use(session({ secret: 'stravaline' }));
+app.use(session({
+  secret: process.env.cookieSecret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 1.21e+9 }
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
