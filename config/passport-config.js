@@ -18,45 +18,6 @@ module.exports = function(passport) {
         });
       });
 
-/*
-    passport.use(new StravaStrategy({
-
-        clientID        : process.env.clientID,
-        clientSecret    : process.env.clientSecret,
-        callbackURL     : process.env.callbackURL,
-        passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-
-    },
-    function(req, accessToken, refreshToken, profile, done) {
-          User.findOne({ where :{ 'stravaId' : profile.id }})
-					.then (function (user) {
-						if (user) {
-							if (!user.token) {
-								user.token = accessToken;
-								user.name  = profile.displayName;
-
-								user.save()
-									.then( function() {done(null, user);})
-									.catch (function(e) {});
-              } else {
-								done(null, user);
-							}
-						} else {
-							var newUser = User.build ({
-								stravaId: profile.id,
-								token: accessToken,
-								name: profile.displayName,
-							});
-							newUser.save()
-									.then( function() {done(null, user);})
-									.catch (function(e) {});
-						}
-					});
-        }));
-*/
-
-// This almost works
-
     passport.use(new StravaStrategy({
 
         clientID : process.env.clientID,
@@ -67,7 +28,6 @@ module.exports = function(passport) {
     },
 
     function(req, accessToken, refreshToken, profile, done) {
-            // check if the user is already logged in
         if (!req.user) {
 
             User.findOne({ where :{ 'stravaId' : profile.id }})
@@ -88,7 +48,7 @@ module.exports = function(passport) {
     					var newUser = User.build ({
                 stravaId: profile.id,
 								token: accessToken,
-								name: profile.displayName,
+								name: profile.displayName
     					});
     					newUser.save()
     								.then( function() {done(null, user);})
@@ -96,8 +56,7 @@ module.exports = function(passport) {
     				}
     			});
             } else {
-                // user already exists and is logged in, we have to link accounts
-                var user            = req.user; // pull the user out of the session
+                var user = req.user;
 
                 user.stravaId = profile.id;
                 user.token = accessToken;

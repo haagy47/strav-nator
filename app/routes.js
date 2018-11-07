@@ -24,12 +24,6 @@ module.exports = function(app, passport) {
         failureRedirect: '/' })(req, res, next);
     });
 
-    /*app.get('/auth/strava/callback',
-      passport.authorize('strava', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-      }));*/
-
 };
 
 function isLoggedIn(req, res, next) {

@@ -1,16 +1,16 @@
 require("dotenv").config();
 const path = require("path");
 const viewsFolder = path.join(__dirname, "views");
-const express  = require('express');
-const app      = express();
-const port     = normalizePort(process.env.PORT || 3000);
+const express = require('express');
+const app = express();
+const port = normalizePort(process.env.PORT || 3000);
 const passport = require('passport');
-const flash    = require('connect-flash');
-
-const morgan       = require('morgan');
+const flash = require('connect-flash');
+const strava = require('strava-v3');
+const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser   = require('body-parser');
-const session      = require('express-session');
+const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const configDB = require('./config/db/models/index.js');
 
